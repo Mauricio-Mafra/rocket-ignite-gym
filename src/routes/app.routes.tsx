@@ -39,6 +39,10 @@ export function AppRoutes() {
                 height: Platform.OS === "android" ? "auto" : 96,
                 paddingBottom: tokens.space["10"],
                 paddingTop: tokens.space["6"],
+            },
+            tabBarItemStyle:{
+                alignSelf:"center",
+                flexDirection:"row"
             }
         }}>
             <Screen
