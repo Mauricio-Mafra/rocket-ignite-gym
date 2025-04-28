@@ -22,6 +22,8 @@ import * as yup from 'yup';
 
 import { AppError } from '@utils/AppError';
 import { ToastMessage } from '@components/ToastMessage';
+import { useState } from 'react';
+import { useAuth } from '@hooks/useAuth';
 
 type FormDataProps = yup.InferType<typeof signUpSchema>;
 
@@ -44,6 +46,8 @@ const signUpSchema = yup.object({
 export function SignUp() {
     const toast = useToast();
     const navigation = useNavigation<AuthNavigatorRoutesProps>();
+    const [isLoading, setIsLoading] = useState(false);
+    const {signIn} = useAuth();
 
     const {
         control,
@@ -59,15 +63,23 @@ export function SignUp() {
 
     async function handleSignUp({ name, email, password }: FormDataProps) {
         try {
-            const response = await api.post('/users', {
+            setIsLoading(true);
+            await api.post('/users', {
                 name,
                 email,
                 password,
             });
+
+            await signIn(email, password);
+
+
         } catch (error) {
+            setIsLoading(false);
             const isAppError = error instanceof AppError;
 
-            const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde.';
+            const title = isAppError
+                ? error.message
+                : 'Não foi possível criar a conta. Tente novamente mais tarde.';
 
             toast.show({
                 placement: 'top',
@@ -171,6 +183,7 @@ export function SignUp() {
                         <Button
                             title="Criar e acessar"
                             onPress={handleSubmit(handleSignUp)}
+                            isLoading={setIsLoading}
                         />
                     </Center>
 

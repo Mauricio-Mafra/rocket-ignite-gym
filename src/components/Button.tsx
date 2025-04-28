@@ -18,6 +18,7 @@ export function Button({ title, variant = "solid", isLoading = false, ...rest }:
             rounded="$sm"
             $active-bg={variant === "outline" ? "$gray500" : "$green700"}
             disabled={isLoading}
+            opacity={isLoading ? '$50' : '$100'}
 
             {...rest}
         >
