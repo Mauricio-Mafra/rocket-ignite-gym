@@ -3,6 +3,8 @@ import { Heading, HStack, Text, VStack, Icon } from '@gluestack-ui/themed';
 import { useAuth } from '@hooks/useAuth';
 import { LogOut } from 'lucide-react-native';
 import { TouchableOpacity } from 'react-native';
+import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
+import { api } from '@services/api';
 
 export function HomeHeader() {
     const { user, signOut } = useAuth();
@@ -17,9 +19,11 @@ export function HomeHeader() {
             gap="$4"
         >
             <UserPhoto
-                source={{
-                    uri: 'https://avatars.fastly.steamstatic.com/8be3015ca517420d39b0a6224cf0a3be131faae3_full.jpg',
-                }}
+                source={
+                    user.avatar
+                    ? {uri: `${api.defaults.baseURL}/avatar/${user.avatar}`}
+                    : defaultUserPhotoImg
+                }
                 alt="Imagem do usuário"
             />
             <VStack flex={1}>
